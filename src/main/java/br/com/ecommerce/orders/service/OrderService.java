@@ -15,11 +15,13 @@ import br.com.ecommerce.orders.exception.ProductOutOfStockDTO;
 import br.com.ecommerce.orders.http.ProductClient;
 import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.order.OrderCreateDTO;
+import br.com.ecommerce.orders.model.order.OrderDTO;
 import br.com.ecommerce.orders.model.order.OrderStatus;
 import br.com.ecommerce.orders.model.product.Product;
 import br.com.ecommerce.orders.model.product.ProductAndPriceDTO;
 import br.com.ecommerce.orders.model.product.ProductDTO;
 import br.com.ecommerce.orders.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class OrderService {
@@ -82,6 +84,13 @@ public class OrderService {
 		return products.stream()
 				.map(p -> p.getPrice().multiply(new BigDecimal(p.getUnit())))
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+	
+	public OrderDTO getOrderById(Long id, Long userId) {
+		Order order = orderRepository.findByIdAndUserId(id, userId)
+				.orElseThrow(EntityNotFoundException::new);
+		
+		return new OrderDTO(order);
 	}
 	
 }
