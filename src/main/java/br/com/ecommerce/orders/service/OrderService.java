@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import br.com.ecommerce.orders.exception.OutOfStockException;
 import br.com.ecommerce.orders.exception.ProductOutOfStockDTO;
 import br.com.ecommerce.orders.http.ProductClient;
 import br.com.ecommerce.orders.model.order.Order;
+import br.com.ecommerce.orders.model.order.OrderBasicInfDTO;
 import br.com.ecommerce.orders.model.order.OrderCreateDTO;
 import br.com.ecommerce.orders.model.order.OrderDTO;
 import br.com.ecommerce.orders.model.order.OrderStatus;
@@ -91,6 +94,12 @@ public class OrderService {
 				.orElseThrow(EntityNotFoundException::new);
 		
 		return new OrderDTO(order);
+	}
+	
+	public Page<OrderBasicInfDTO> getAllOrdersByUser(Pageable pageable, Long userId) {
+		return this.orderRepository
+				.findAllByUserId(pageable, userId)
+				.map(OrderBasicInfDTO::new);
 	}
 	
 }
