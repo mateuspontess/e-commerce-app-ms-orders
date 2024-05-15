@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,6 +20,7 @@ import br.com.ecommerce.orders.model.PaymentDTO;
 import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.order.OrderBasicInfDTO;
 import br.com.ecommerce.orders.model.order.OrderCreateDTO;
+import br.com.ecommerce.orders.model.order.OrderDTO;
 import br.com.ecommerce.orders.model.product.StockWriteOffDTO;
 import br.com.ecommerce.orders.service.OrderService;
 import jakarta.transaction.Transactional;
@@ -61,6 +63,17 @@ public class OrderController {
 			) {
 		
 		Page<OrderBasicInfDTO> orders = service.getAllOrdersByUser(pageable, userId);
+		return ResponseEntity.ok(orders);
+	}
+	
+	@GetMapping("/{orderId}")
+	public ResponseEntity<?> getOrderByIdAndUserId(
+			@PageableDefault(size = 10) Pageable pageable,
+			@PathVariable Long orderId,
+			@RequestHeader("X-auth-user-id") Long userId
+			) {
+		
+		OrderDTO orders = service.getOrderById(orderId, userId);
 		return ResponseEntity.ok(orders);
 	}
 }
