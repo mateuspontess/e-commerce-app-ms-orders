@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.order.OrderBasicInfDTO;
 import br.com.ecommerce.orders.model.order.OrderCreateDTO;
 import br.com.ecommerce.orders.model.order.OrderDTO;
+import br.com.ecommerce.orders.model.order.OrderStatus;
 import br.com.ecommerce.orders.model.product.StockWriteOffDTO;
 import br.com.ecommerce.orders.service.OrderService;
 import jakarta.transaction.Transactional;
@@ -75,5 +77,18 @@ public class OrderController {
 		
 		OrderDTO orders = service.getOrderById(orderId, userId);
 		return ResponseEntity.ok(orders);
+	}
+	
+	@PutMapping("/{orderId}")
+	@Transactional
+	public ResponseEntity<?> cancelOrder(
+			@PathVariable Long orderId,
+			@RequestHeader("X-auth-user-id") String token
+			) {
+		
+		service.updateOrderStatus(orderId, OrderStatus.CANCELED);
+		
+		template.convertAndSend("order-cancel.ex", "cancellation", orderId);
+		return ResponseEntity.ok().build();
 	}
 }
