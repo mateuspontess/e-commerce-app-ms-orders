@@ -72,11 +72,12 @@ public class OrderService {
 	//
 	private void validateProductsStocks(OrderCreateDTO dto) {
 		ResponseEntity<List<ProductOutOfStockDTO>> response = this.productClient.verifyStocks(dto.products());
-		if (response.getStatusCode().equals(HttpStatus.OK))
-			return;
-		
 		if (response.getStatusCode().equals(HttpStatus.MULTI_STATUS))
 			throw new OutOfStockException("There are products out of stock", response.getBody());
+		
+		if (!response.getStatusCode().equals(HttpStatus.OK))
+			throw new RuntimeException("Internal server error");
+		
 	}
 	private List<ProductAndPriceDTO> getPricedProducts(List<ProductDTO> products) {
 		ResponseEntity<List<ProductAndPriceDTO>> response = this.productClient.getPrices(products);
