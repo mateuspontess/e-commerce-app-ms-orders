@@ -53,8 +53,8 @@ public class OrderController {
 				.map(o -> new StockWriteOffDTO(o.getProductId(), o.getUnit()))
 				.toList();
 		
-		template.convertAndSend("order.create.ex", "payment", paymentCreate);
-		template.convertAndSend("order.create.ex", "stock", stockUpdate);
+		template.convertAndSend("orders.create.ex", "payment", paymentCreate);
+		template.convertAndSend("orders.create.ex", "stock", stockUpdate);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -88,7 +88,7 @@ public class OrderController {
 		
 		service.updateOrderStatus(orderId, OrderStatus.CANCELED);
 		
-		template.convertAndSend("order-cancel.ex", "cancellation", orderId);
+		template.convertAndSend("orders-cancel.ex", "cancellation", orderId);
 		return ResponseEntity.ok().build();
 	}
 }
