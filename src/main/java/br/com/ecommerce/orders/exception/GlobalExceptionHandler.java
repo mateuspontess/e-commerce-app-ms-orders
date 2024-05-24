@@ -58,8 +58,8 @@ public class GlobalExceptionHandler {
         		.body(ex.getMessage());
     }
 
-	@ExceptionHandler(OrderValidationException.class)
-	public ResponseEntity<ErrorMessage> handlerOrderValidationException(OrderValidationException ex) {
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ErrorMessage> handlerIllegalArgumentException(IllegalArgumentException ex) {
 		return ResponseEntity
 				.badRequest()
 				.body(new ErrorMessage(

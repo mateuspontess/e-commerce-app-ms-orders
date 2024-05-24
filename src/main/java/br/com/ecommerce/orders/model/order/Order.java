@@ -17,7 +17,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -37,7 +36,7 @@ public class Order {
 	
 	private LocalDate date;
 
-	@Enumerated(EnumType.STRING) @Setter
+	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 	
 	
@@ -47,6 +46,14 @@ public class Order {
 		this.status = status;
 		this.total = total;
 		this.date = LocalDate.now();
+	}
+	
+	public void updateOrderStatus(OrderStatus newStatus) {
+		List<OrderStatus> allowedStatuses = AllowedStatusTransitions.getAllowedOrderStatus(this.status);
+		if(allowedStatuses == null || !allowedStatuses.contains(newStatus)) 
+			throw new IllegalArgumentException("The status " + this.status + " cannot transition to " + newStatus);
+		
+		this.status = newStatus;
 	}
 	
 	@Override

@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import br.com.ecommerce.orders.exception.OrderValidationException;
 import br.com.ecommerce.orders.exception.OutOfStockException;
 import br.com.ecommerce.orders.exception.ProductOutOfStockDTO;
 import br.com.ecommerce.orders.http.ProductClient;
-import br.com.ecommerce.orders.model.order.AllowedStatusTransitions;
 import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.order.OrderBasicInfDTO;
 import br.com.ecommerce.orders.model.order.OrderCreateDTO;
@@ -108,11 +106,7 @@ public class OrderService {
 	public OrderDTO updateOrderStatus(Long orderId, OrderStatus newStatus) {
 		Order order = orderRepository.getReferenceById(orderId);
 		
-		List<OrderStatus> allowedStatuses = AllowedStatusTransitions.getAllowedOrderStatus(order.getStatus());
-		if(allowedStatuses == null || !allowedStatuses.contains(newStatus)) 
-			throw new OrderValidationException("Status transition not allowed");
-		
-		order.setStatus(newStatus);
+		order.updateOrderStatus(newStatus);
 		orderRepository.save(order);
 		
 		return new OrderDTO(order);
