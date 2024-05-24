@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
-public class OrderExceptionHandler {
+public class GlobalExceptionHandler {
 	
 	private final String CREDENTIALS_ERROR_MESSAGE = "Bad credentials";
 	private final String METHOD_ARGUMENT_NOT_VALID_MESSAGE = "Input validation error";
