@@ -1,6 +1,5 @@
 package br.com.ecommerce.orders.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,16 +52,8 @@ public class OrderService {
 					unitsMap.get(p.id())))
 			.toList();
 		
-		// get amount order
-		BigDecimal orderTotalValue = this.calculateTotalOrderValue(products);
-		
 		// create order
-		Order order = new Order(
-				userId, 
-				products, 
-				orderTotalValue, 
-				OrderStatus.AWAITING_PAYMENT);
-		
+		Order order = new Order(userId, products);
 		// link products to order
 		products.forEach(p -> p.setOrder(order));
 
@@ -85,11 +76,6 @@ public class OrderService {
 			throw new RuntimeException("Internal server error");
 		
 		return response.getBody();
-	}
-	private BigDecimal calculateTotalOrderValue(List<Product> products) {
-		return products.stream()
-				.map(p -> p.getPrice().multiply(new BigDecimal(p.getUnit())))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
 	public OrderDTO getOrderById(Long id, Long userId) {
