@@ -41,16 +41,22 @@ public class Order {
 	private OrderStatus status;
 	
 	
-	public Order(Long userId, List<Product> products, BigDecimal total, OrderStatus status) {
+	public Order(Long userId, List<Product> products) {
 		this.products = products;
 		this.userId = userId;
-		this.status = status;
-		this.total = total;
+		this.status = OrderStatus.AWAITING_PAYMENT;
+		this.total = this.calculateTotalOrderValue();
 		this.date = LocalDate.now();
+	}
+
+	private BigDecimal calculateTotalOrderValue() {
+		return this.products.stream()
+				.map(p -> p.getPrice().multiply(new BigDecimal(p.getUnit())))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("Order(userId=%d, total=%s, status=%s)", this.userId, this.total.toString(), this.status);
+		return String.format("Order[userId=%d, total=%s, status=%s]", this.userId, this.total.toString(), this.status);
 	}
 }
