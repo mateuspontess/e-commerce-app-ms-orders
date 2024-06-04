@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.ecommerce.orders.model.PaymentDTO;
 import br.com.ecommerce.orders.model.order.Order;
@@ -40,22 +41,24 @@ public class OrderController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> create(
+	public ResponseEntity<OrderDTO> create(
 			@RequestBody @Valid OrderCreateDTO dto, 
-			@RequestHeader("X-auth-user-id") Long userId
+			@RequestHeader("X-auth-user-id") Long userId,
+			UriComponentsBuilder uriBuilder
 			) {
 		Order order = service.saveOrder(dto, userId);
 		
-		PaymentDTO paymentCreate = new PaymentDTO(
+		PaymentDTO paymentCreateRabbit = new PaymentDTO(
 				order.getId(), order.getUserId(), order.getTotal());
-		
-		List<StockWriteOffDTO> stockUpdate = order.getProducts().stream()
+		List<StockWriteOffDTO> stockUpdateRabbit = order.getProducts().stream()
 				.map(o -> new StockWriteOffDTO(o.getProductId(), o.getUnit()))
 				.toList();
+		OrderDTO responseBody = new OrderDTO(order);
 		
-		template.convertAndSend("orders.create.ex", "payment", paymentCreate);
-		template.convertAndSend("orders.create.ex", "stock", stockUpdate);
-		return ResponseEntity.ok().build();
+		var uri = uriBuilder.path("/orders/{orderId}").buildAndExpand(responseBody.id()).toUri();
+		template.convertAndSend("orders.create.ex", "payment", paymentCreateRabbit);
+		template.convertAndSend("orders.create.ex", "stock", stockUpdateRabbit);
+		return ResponseEntity.created(uri).body(responseBody);
 	}
 	
 	@GetMapping
