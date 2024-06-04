@@ -11,14 +11,10 @@ import br.com.ecommerce.orders.model.product.ProductDTO;
 public record OrderDTO(
 		
 		Long id,
-		
 		List<ProductDTO> products,
-		
 		BigDecimal totalOrder,
-		
 		@JsonFormat(pattern = "dd/MM/yyyy")
 		LocalDate date,
-		
 		OrderStatus status
 		) {
 	
