@@ -51,7 +51,7 @@ public class OrderController {
 		PaymentDTO paymentCreateRabbit = new PaymentDTO(
 				order.getId(), order.getUserId(), order.getTotal());
 		List<StockWriteOffDTO> stockUpdateRabbit = order.getProducts().stream()
-				.map(o -> new StockWriteOffDTO(o.getProductId(), o.getUnit()))
+				.map(o -> new StockWriteOffDTO(o.getProductId(), o.getUnit() * -1))
 				.toList();
 		OrderDTO responseBody = new OrderDTO(order);
 		
