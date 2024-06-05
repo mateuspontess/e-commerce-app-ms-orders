@@ -58,7 +58,7 @@ public class OrderService {
 		orderRepository.save(order);
 		return order;
 	}
-	//
+	
 	private void validateProductsStocks(OrderCreateDTO dto) {
 		ResponseEntity<List<ProductOutOfStockDTO>> response = this.productClient.verifyStocks(dto.products());
 		if (response.getStatusCode().equals(HttpStatus.MULTI_STATUS))
@@ -66,7 +66,6 @@ public class OrderService {
 		
 		if (!response.getStatusCode().equals(HttpStatus.OK))
 			throw new RuntimeException("Internal server error");
-		
 	}
 	private List<ProductAndPriceDTO> getPricedProducts(List<ProductDTO> products) {
 		ResponseEntity<List<ProductAndPriceDTO>> response = this.productClient.getPrices(products);
@@ -93,8 +92,6 @@ public class OrderService {
 		Order order = orderRepository.getReferenceById(orderId);
 		
 		order.updateOrderStatus(newStatus);
-		orderRepository.save(order);
-		
 		return new OrderDTO(order);
 	}
 }
