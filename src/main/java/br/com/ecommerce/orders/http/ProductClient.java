@@ -22,5 +22,5 @@ public interface ProductClient {
 	@PostMapping(
 			value = "/products/prices",
 			headers = {"Content-Type: application/json"})
-	ResponseEntity<List<ProductAndPriceDTO>> getPrices(@RequestBody List<ProductDTO> products);
+	ResponseEntity<List<ProductAndPriceDTO>> getPrices(@RequestBody List<Long> productsIds);
 }

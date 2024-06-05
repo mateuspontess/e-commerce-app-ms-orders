@@ -39,7 +39,7 @@ public class OrderService {
 		this.validateProductsStocks(dto);
 		
 		// get products
-		List<ProductAndPriceDTO> prices = this.getPricedProducts(dto.products());
+		List<ProductAndPriceDTO> prices = this.getPricedProducts(dto.products().stream().map(ProductDTO::id).toList());
 		
 		Map<Long, Integer> unitsMap = dto.products().stream()
 				.collect(Collectors.toMap(ProductDTO::id, ProductDTO::unit));
@@ -67,8 +67,9 @@ public class OrderService {
 		if (!response.getStatusCode().equals(HttpStatus.OK))
 			throw new RuntimeException("Internal server error");
 	}
-	private List<ProductAndPriceDTO> getPricedProducts(List<ProductDTO> products) {
-		ResponseEntity<List<ProductAndPriceDTO>> response = this.productClient.getPrices(products);
+	private List<ProductAndPriceDTO> getPricedProducts(List<Long> productsId) {
+		ResponseEntity<List<ProductAndPriceDTO>> response = this.productClient.getPrices(productsId);
+
 		if (response.getStatusCode().value() != 200)
 			throw new RuntimeException("Internal server error");
 		
