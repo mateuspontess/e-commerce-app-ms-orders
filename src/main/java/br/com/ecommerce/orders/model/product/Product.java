@@ -38,8 +38,17 @@ public class Product {
 	private BigDecimal price;
 	
 	public Product(Long productId, BigDecimal price, Integer unit) {
+		checkNotNull(productId, "productId");
+        checkNotNull(price, "price");
+        checkNotNull(unit, "unit");
+
 		this.productId = productId;
 		this.unit = unit;
 		this.price = price;
+	}
+
+    private void checkNotNull(Object field, String fieldName) {
+        if (field == null)
+            throw new IllegalArgumentException("Cannot be null: " + fieldName);
 	}
 }
