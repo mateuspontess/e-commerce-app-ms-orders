@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
 	
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handlerException(Exception ex) {
+		ex.printStackTrace();
         return ResponseEntity
         		.internalServerError()
         		.body(new ErrorMessage(

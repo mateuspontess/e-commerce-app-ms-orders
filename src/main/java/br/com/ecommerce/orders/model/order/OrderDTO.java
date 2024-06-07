@@ -17,7 +17,7 @@ public record OrderDTO(
 		LocalDate date,
 		OrderStatus status
 		) {
-	
+			
 	public OrderDTO(Order o) {
 		this(
 				o.getId(),
