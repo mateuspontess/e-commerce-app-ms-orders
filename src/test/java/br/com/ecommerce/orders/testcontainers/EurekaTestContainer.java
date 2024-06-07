@@ -6,12 +6,12 @@ import org.testcontainers.containers.GenericContainer;
 
 public class EurekaTestContainer implements BeforeAllCallback {
 
-    private static GenericContainer rabbit;
+    private static GenericContainer<?> rabbit;
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
 
-            rabbit = new GenericContainer("mateuspontessan/eureka-server")
+            rabbit = new GenericContainer<>("mateuspontessan/eureka-server")
                 .withExposedPorts(9091);
             rabbit.start();
 
