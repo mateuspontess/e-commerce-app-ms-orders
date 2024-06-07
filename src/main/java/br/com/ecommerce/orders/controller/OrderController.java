@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,27 +62,25 @@ public class OrderController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> getAllBasicsInfoOrdersByUser(
+	public ResponseEntity<Page<OrderBasicInfDTO>> getAllBasicsInfoOrdersByUser(
 			@PageableDefault(size = 10) Pageable pageable,
 			@RequestHeader("X-auth-user-id") Long userId
 			) {
 		
-		Page<OrderBasicInfDTO> orders = service.getAllOrdersByUser(pageable, userId);
-		return ResponseEntity.ok(orders);
+		return ResponseEntity.ok(service.getAllOrdersByUser(pageable, userId));
 	}
 	
 	@GetMapping("/{orderId}")
-	public ResponseEntity<?> getOrderByIdAndUserId(
+	public ResponseEntity<OrderDTO> getOrderByIdAndUserId(
 			@PageableDefault(size = 10) Pageable pageable,
 			@PathVariable Long orderId,
 			@RequestHeader("X-auth-user-id") Long userId
 			) {
 		
-		OrderDTO orders = service.getOrderById(orderId, userId);
-		return ResponseEntity.ok(orders);
+		return ResponseEntity.ok(service.getOrderById(orderId, userId));
 	}
 	
-	@PutMapping("/{orderId}")
+	@PatchMapping("/{orderId}")
 	@Transactional
 	public ResponseEntity<?> cancelOrder(
 			@PathVariable Long orderId,
