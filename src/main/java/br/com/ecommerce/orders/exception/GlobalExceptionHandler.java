@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
         		.body(new ErrorMessage(
         				HttpStatus.INTERNAL_SERVER_ERROR.value(),
         				INTERNAL_SERVER_ERROR_MESSAGE));
+    }
+
+	@ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleError404(NoResourceFoundException ex) {
+    	return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
