@@ -23,23 +23,35 @@ class ProductTest {
     @Test
     @DisplayName("Test creating product with various invalid inputs")
     void createOrderTest02() {
-        assertDoesNotThrow(() -> new Order(1L, List.of(new Product(1L, BigDecimal.TEN, 1))));
-
+        assertDoesNotThrow(() -> new Order(1L, List.of(new Product(1L, BigDecimal.TEN, 1))),
+            "Creating order with valid inputs should not throw an exception");
+    
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(null, BigDecimal.TEN, 10));
+            () -> new Product(null, BigDecimal.TEN, 10),
+            "Creating product with null ID should throw IllegalArgumentException");
+        
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(1L, null, 10));
+            () -> new Product(1L, null, 10),
+            "Creating product with null price should throw IllegalArgumentException");
+        
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(1L, BigDecimal.TEN, null));
-
+            () -> new Product(1L, BigDecimal.TEN, null),
+            "Creating product with null quantity should throw IllegalArgumentException");
+    
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(null, null, 10));
+            () -> new Product(null, null, 10),
+            "Creating product with null ID and null price should throw IllegalArgumentException");
+        
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(1L, null, null));
+            () -> new Product(1L, null, null),
+            "Creating product with null price and null quantity should throw IllegalArgumentException");
+        
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(null, BigDecimal.TEN, null));
-
+            () -> new Product(null, BigDecimal.TEN, null),
+            "Creating product with null ID and null quantity should throw IllegalArgumentException");
+    
         assertThrows(IllegalArgumentException.class, 
-            () -> new Product(null, null, null));
+            () -> new Product(null, null, null),
+            "Creating product with all null inputs should throw IllegalArgumentException");
     }
 }
