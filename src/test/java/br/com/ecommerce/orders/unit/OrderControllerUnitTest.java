@@ -32,7 +32,7 @@ import br.com.ecommerce.orders.service.OrderService;
 
 @WebMvcTest
 @AutoConfigureJsonTesters
-class OrderControllerTest {
+class OrderControllerUnitTest {
 
     @Autowired
     private MockMvc mvc;
