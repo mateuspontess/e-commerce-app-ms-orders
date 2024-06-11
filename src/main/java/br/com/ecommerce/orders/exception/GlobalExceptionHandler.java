@@ -63,8 +63,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleError400(HttpMessageNotReadableException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<ErrorMessage> handleError400(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(new ErrorMessage(HttpStatus.OK.value(), "Malformed or unexpected json format"));
     }
 
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
