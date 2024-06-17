@@ -41,7 +41,7 @@ public class OrderController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<OrderDTO> create(
+	public ResponseEntity<OrderDTO> createOrder(
 			@RequestBody @Valid OrderCreateDTO dto, 
 			@RequestHeader("X-auth-user-id") Long userId,
 			UriComponentsBuilder uriBuilder
@@ -89,6 +89,7 @@ public class OrderController {
 		
 		service.updateOrderStatus(orderId, OrderStatus.CANCELED);
 		
+		// cancel payment
 		template.convertAndSend("orders-cancel.ex", "cancellation", orderId);
 		return ResponseEntity.ok().build();
 	}

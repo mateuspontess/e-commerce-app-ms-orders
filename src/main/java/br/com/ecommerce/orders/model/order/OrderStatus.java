@@ -14,7 +14,7 @@ public enum OrderStatus {
     private String status;
 
     OrderStatus(String status) {
-        this.status = status;
+        this.status = status.toUpperCase();
     }
 
     @JsonValue

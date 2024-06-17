@@ -70,7 +70,7 @@ public class OrderService {
 	private List<ProductAndPriceDTO> getPricedProducts(List<Long> productsId) {
 		ResponseEntity<List<ProductAndPriceDTO>> response = this.productClient.getPrices(productsId);
 
-		if (response.getStatusCode().value() != 200)
+		if (!response.getStatusCode().equals(HttpStatus.OK))
 			throw new RuntimeException("Internal server error");
 		
 		return response.getBody();
@@ -84,8 +84,7 @@ public class OrderService {
 	}
 	
 	public Page<OrderBasicInfDTO> getAllOrdersByUser(Pageable pageable, Long userId) {
-		return this.orderRepository
-				.findAllByUserId(pageable, userId)
+		return this.orderRepository.findAllByUserId(pageable, userId)
 				.map(OrderBasicInfDTO::new);
 	}
 	
