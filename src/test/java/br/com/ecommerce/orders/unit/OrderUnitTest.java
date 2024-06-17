@@ -14,7 +14,7 @@ import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.order.OrderStatus;
 import br.com.ecommerce.orders.model.product.Product;
 
-class OrderTest {
+class OrderUnitTest {
 
     @Test
     @DisplayName("Test creating order with valid data")

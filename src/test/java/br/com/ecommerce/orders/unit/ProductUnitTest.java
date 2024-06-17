@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import br.com.ecommerce.orders.model.order.Order;
 import br.com.ecommerce.orders.model.product.Product;
 
-class ProductTest {
+class ProductUnitTest {
 
     @Test
     @DisplayName("Test creating an order with a valid product")
