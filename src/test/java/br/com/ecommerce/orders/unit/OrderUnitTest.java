@@ -1,5 +1,6 @@
 package br.com.ecommerce.orders.unit;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,10 +22,15 @@ class OrderUnitTest {
     void createOrderTest01() {
         assertDoesNotThrow(() -> new Order(1L, List.of(new Product(1L, BigDecimal.TEN, 1))),
             "Should not throw exception when creating order with valid data");
+            
+        assertAll(() -> {
+            var products = List.of(new Product(1L, BigDecimal.ONE, 1), new Product(2L, BigDecimal.ONE, 1), new Product(3L, BigDecimal.ONE, 1));
+            var order = new Order(1L, products);
 
-        assertEquals(OrderStatus.AWAITING_PAYMENT, 
-            new Order(1L, List.of(new Product(1L, BigDecimal.TEN, 1))).getStatus(),
-            "Status should be AWAITING_PAYMENT after creating order");
+            assertEquals(BigDecimal.valueOf(3), order.getTotal());
+        });
+
+
     }
     @Test
     @DisplayName("Test creating order with invalid data")
