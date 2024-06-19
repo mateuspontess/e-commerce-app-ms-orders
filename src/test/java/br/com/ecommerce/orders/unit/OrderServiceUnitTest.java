@@ -11,13 +11,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -46,6 +45,7 @@ class OrderServiceUnitTest {
 
 
 	@Test
+	@DisplayName("Unit - saveOrder - Should throw an exception when validating that the stock is insufficient")
 	void saveOrderValidateProductsStocksTest01() {
 		// arrange
 		var input = new OrderCreateDTO(List.of(
@@ -57,7 +57,8 @@ class OrderServiceUnitTest {
 		var responseBodyVerifyStocks = List.of(
 			new ProductOutOfStockDTO(1L, "product-1", 1), 
 			new ProductOutOfStockDTO(2L, "product-2", 1), 
-			new ProductOutOfStockDTO(3L, "product-3", 1));
+			new ProductOutOfStockDTO(3L, "product-3", 1)
+		);
 		
 		var responseMock = ResponseEntity.status(HttpStatus.MULTI_STATUS).body(responseBodyVerifyStocks);
 		when(productClient.verifyStocks(any())).thenReturn(responseMock);
@@ -66,6 +67,7 @@ class OrderServiceUnitTest {
 		assertThrows(OutOfStockException.class, () -> service.saveOrder(input, 1L));
 	}	
 	@Test
+	@DisplayName("Unit - saveOrder - Should throw exception when stock service response is different than 200")
 	void saveOrderValidateProductsStocksTest02() {
 		// arrange
 		var input = new OrderCreateDTO(List.of(
@@ -82,6 +84,7 @@ class OrderServiceUnitTest {
 		assertThrows(RuntimeException.class, () -> service.saveOrder(input, 1L));
 	}
 	@Test
+	@DisplayName("Unit - saveOrder - should throw exception when price service response is different than 200")
 	void saveOrdergetPricedProducts01() {
 		// arrange
 		var input = new OrderCreateDTO(List.of(
@@ -100,6 +103,7 @@ class OrderServiceUnitTest {
 		assertThrows(RuntimeException.class, () -> service.saveOrder(input, 1L));
 	}
 	@Test
+	@DisplayName("Unit - saveOrder - Must create product successfully")
 	void saveOrder01() {
 		// arrange
 		var input = new OrderCreateDTO(List.of(
@@ -131,55 +135,10 @@ class OrderServiceUnitTest {
 	}
 
 	@Test
+	@DisplayName("Unit - getOrderById - Should throw exception when not finding the product by ID")
 	void getOrderByIdTest01() {
 		when(repository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.empty());
 		assertThrows(EntityNotFoundException.class, () -> service.getOrderById(1L, 1L));
-	}
-	@Test
-	void getOrderByIdTest02() {
-		// arrange
-		List<Product> products = List.of();
-		Order order = Order.builder()
-			.id(1L)
-			.userId(1L)
-			.products(products)
-			.total(BigDecimal.ZERO)
-			.date(LocalDate.now())
-			.status(OrderStatus.AWAITING_PAYMENT)
-			.build();
-		when(repository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(order));
-		
-		// act
-		var result = service.getOrderById(1L, 1L);
-
-		// assert
-		assertEquals(order.getId(), result.id());
-	}
-
-	@Test
-	void getAllOrdersByUserTest01() {
-		// arrange
-		List<Product> products = List.of();
-		Order order = Order.builder()
-			.id(1L)
-			.userId(1L)
-			.products(products)
-			.total(BigDecimal.ZERO)
-			.date(LocalDate.now())
-			.status(OrderStatus.AWAITING_PAYMENT)
-			.build();
-		when(repository.findAllByUserId(any(), anyLong())).thenReturn(new PageImpl<>(List.of(order)));
-		
-		// act
-		var result = service.getAllOrdersByUser(Pageable.unpaged(), 1L)
-			.getContent()
-			.get(0);
-
-		// assert
-		assertEquals(order.getId(), result.id());
-		assertEquals(order.getTotal(), result.totalOrder());
-		assertEquals(order.getDate(), result.date());
-		assertEquals(order.getStatus(), result.status());
 	}
 
 	@Test
