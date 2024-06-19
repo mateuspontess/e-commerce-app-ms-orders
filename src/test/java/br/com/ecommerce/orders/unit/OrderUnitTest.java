@@ -29,8 +29,6 @@ class OrderUnitTest {
 
             assertEquals(BigDecimal.valueOf(3), order.getTotal());
         });
-
-
     }
     @Test
     @DisplayName("Test creating order with invalid data")
