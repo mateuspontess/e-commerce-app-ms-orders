@@ -42,10 +42,10 @@ public class OrderController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<OrderDTO> createOrder(
-			@RequestBody @Valid OrderCreateDTO dto, 
-			@RequestHeader("X-auth-user-id") Long userId,
-			UriComponentsBuilder uriBuilder
-			) {
+		@RequestBody @Valid OrderCreateDTO dto, 
+		@RequestHeader("X-auth-user-id") Long userId,
+		UriComponentsBuilder uriBuilder
+		) {
 		Order order = service.saveOrder(dto, userId);
 		
 		PaymentDTO paymentCreateRabbit = new PaymentDTO(
@@ -63,34 +63,30 @@ public class OrderController {
 	
 	@GetMapping
 	public ResponseEntity<Page<OrderBasicInfDTO>> getAllBasicsInfoOrdersByUser(
-			@PageableDefault(size = 10) Pageable pageable,
-			@RequestHeader("X-auth-user-id") Long userId
-			) {
+		@PageableDefault(size = 10) Pageable pageable,
+		@RequestHeader("X-auth-user-id") Long userId
+		) {
 		
 		return ResponseEntity.ok(service.getAllOrdersByUser(pageable, userId));
 	}
 	
 	@GetMapping("/{orderId}")
 	public ResponseEntity<OrderDTO> getOrderByIdAndUserId(
-			@PageableDefault(size = 10) Pageable pageable,
-			@PathVariable Long orderId,
-			@RequestHeader("X-auth-user-id") Long userId
-			) {
+		@PageableDefault(size = 10) Pageable pageable,
+		@PathVariable Long orderId,
+		@RequestHeader("X-auth-user-id") Long userId
+		) {
 		
 		return ResponseEntity.ok(service.getOrderById(orderId, userId));
 	}
 	
 	@PatchMapping("/{orderId}")
 	@Transactional
-	public ResponseEntity<?> cancelOrder(
-			@PathVariable Long orderId,
-			@RequestHeader("X-auth-user-id") String token
-			) {
-		
+	public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, @RequestHeader("X-auth-user-id") String token) {
 		service.updateOrderStatus(orderId, OrderStatus.CANCELED);
 		
 		// cancel payment
 		template.convertAndSend("orders-cancel.ex", "cancellation", orderId);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 }
