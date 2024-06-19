@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotNull;
 
 public record ProductDTO(
 		
-		@NotNull
-		Long id,
-		@NotNull
-		Integer unit
-		) {
+	@NotNull
+	Long id,
+	@NotNull
+	Integer unit
+	) {
 	
 	public ProductDTO(Product p) {
 		this(p.getProductId(), p.getUnit());

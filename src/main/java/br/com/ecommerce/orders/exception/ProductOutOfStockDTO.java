@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties
 public record ProductOutOfStockDTO(
 		
-		@JsonAlias("productId")
-		Long id, 
-		
-		String name, 
-		
-		@JsonAlias("unit")
-		Integer stock
-		) {}
+	@JsonAlias("productId")
+	Long id, 
+	
+	String name, 
+	
+	@JsonAlias("unit")
+	Integer stock
+) {}

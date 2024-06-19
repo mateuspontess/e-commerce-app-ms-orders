@@ -66,8 +66,8 @@ public class Order {
 	
 	private BigDecimal calculateTotalOrderValue() {
 		return this.products.stream()
-				.map(p -> p.getPrice().multiply(new BigDecimal(p.getUnit())))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+			.map(p -> p.getPrice().multiply(new BigDecimal(p.getUnit())))
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 	
 	private void checkNotNull(Object field, String fieldName) {

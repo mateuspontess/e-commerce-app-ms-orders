@@ -15,12 +15,12 @@ import br.com.ecommerce.orders.model.product.ProductDTO;
 public interface ProductClient {
 
 	@PostMapping(
-			value = "/products/stocks",
-			headers = {"Content-Type: application/json"})
+		value = "/products/stocks",
+		headers = {"Content-Type: application/json"})
 	ResponseEntity<List<ProductOutOfStockDTO>> verifyStocks(@RequestBody List<ProductDTO> products);
 
 	@PostMapping(
-			value = "/products/prices",
-			headers = {"Content-Type: application/json"})
+		value = "/products/prices",
+		headers = {"Content-Type: application/json"})
 	ResponseEntity<List<ProductAndPriceDTO>> getPrices(@RequestBody List<Long> productsIds);
 }

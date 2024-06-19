@@ -19,10 +19,10 @@ public record OrderBasicInfDTO(
 	
 	public OrderBasicInfDTO(Order o) {
 		this(
-				o.getId(),
-				o.getTotal(),
-				o.getDate(),
-				o.getStatus()
-			);
+			o.getId(),
+			o.getTotal(),
+			o.getDate(),
+			o.getStatus()
+		);
 	}
 }

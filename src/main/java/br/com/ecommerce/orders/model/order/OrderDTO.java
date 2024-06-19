@@ -20,11 +20,11 @@ public record OrderDTO(
 			
 	public OrderDTO(Order o) {
 		this(
-				o.getId(),
-				o.getProducts().stream().map(p -> new ProductDTO(p)).toList(), 
-				o.getTotal(),
-				o.getDate(),
-				o.getStatus()
-			);
+			o.getId(),
+			o.getProducts().stream().map(p -> new ProductDTO(p)).toList(), 
+			o.getTotal(),
+			o.getDate(),
+			o.getStatus()
+		);
 	}
 }

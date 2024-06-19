@@ -45,9 +45,9 @@ public class OrderService {
 				.collect(Collectors.toMap(ProductDTO::id, ProductDTO::unit));
 		List<Product> products = prices.stream()
 			.map(p -> new Product(
-					p.id(),
-					p.price(),
-					unitsMap.get(p.id())))
+				p.id(),
+				p.price(),
+				unitsMap.get(p.id())))
 			.toList();
 		
 		// create order
@@ -85,7 +85,7 @@ public class OrderService {
 	
 	public Page<OrderBasicInfDTO> getAllOrdersByUser(Pageable pageable, Long userId) {
 		return this.orderRepository.findAllByUserId(pageable, userId)
-				.map(OrderBasicInfDTO::new);
+			.map(OrderBasicInfDTO::new);
 	}
 	
 	public OrderDTO updateOrderStatus(Long orderId, OrderStatus newStatus) {

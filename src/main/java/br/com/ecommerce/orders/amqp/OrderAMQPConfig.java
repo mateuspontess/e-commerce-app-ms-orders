@@ -56,9 +56,9 @@ public class OrderAMQPConfig {
         @Bean
         Binding bindOrdersWithStock() {
         	return BindingBuilder
-        			.bind(this.queueProductsStock())
-        			.to(this.directExchangeCreateOrder())
-        			.with("stock");
+				.bind(this.queueProductsStock())
+				.to(this.directExchangeCreateOrder())
+				.with("stock");
         }
         
         @Bean
@@ -68,9 +68,9 @@ public class OrderAMQPConfig {
         @Bean
         Binding bindOrdersWithPayments() {
         	return BindingBuilder
-        			.bind(this.queuePayments())
-        			.to(this.directExchangeCreateOrder())
-        			.with("payment");
+				.bind(this.queuePayments())
+				.to(this.directExchangeCreateOrder())
+				.with("payment");
         }
 		
 		
@@ -85,9 +85,9 @@ public class OrderAMQPConfig {
         @Bean
         Binding bindingCancelOrder() {
         	return BindingBuilder
-        			.bind(this.queueCancelOrder())
-        			.to(this.directExchangeCancelOrder())
-        			.with("cancellation");
+				.bind(this.queueCancelOrder())
+				.to(this.directExchangeCancelOrder())
+				.with("cancellation");
         }
 	}
 	
