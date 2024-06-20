@@ -13,13 +13,14 @@ public class RabbitMQTestContainerConfig {
     
     @Bean
     @DynamicPropertySource
+    @SuppressWarnings("resource")
 	public RabbitMQContainer getRabbitContainer(DynamicPropertyRegistry registry) {
-        RabbitMQContainer rabbit = new RabbitMQContainer("rabbitmq:3.7.25-management-alpine")
-		    .withExposedPorts(5672, 15672);
+        try (RabbitMQContainer rabbit = new RabbitMQContainer("rabbitmq:3.7.25-management-alpine")
+		    .withExposedPorts(5672, 15672)) {
+            registry.add("spring.rabbitmq.port", () -> rabbit.getAmqpPort());
+            registry.add("eureka.client.enabled", () -> false);
 
-        registry.add("spring.rabbitmq.port", () -> rabbit.getAmqpPort());
-		registry.add("eureka.client.enabled", () -> false);
-
-        return rabbit;
+            return rabbit;
+        }
     }
 }

@@ -14,14 +14,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public class MySQLTestContainerConfig {
 
     @Bean
+    @SuppressWarnings("resource")
     public MySQLContainer<?> mysqlContainer() {
         System.out.println("AQUI");
-        MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.36")
+        try (MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.36")
             .withDatabaseName("testdb")
             .withUsername("root")
-            .withPassword("root");
-        mysqlContainer.start();
-        return mysqlContainer;
+            .withPassword("root")) {
+            mysqlContainer.start();
+            return mysqlContainer;
+        }
     }
 
     @Primary
