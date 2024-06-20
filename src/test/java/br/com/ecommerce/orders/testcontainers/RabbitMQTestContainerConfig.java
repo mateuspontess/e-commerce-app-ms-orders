@@ -10,13 +10,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @TestConfiguration
 public class RabbitMQTestContainerConfig {
-    
+
     @Bean
     @DynamicPropertySource
     @SuppressWarnings("resource")
-	public RabbitMQContainer getRabbitContainer(DynamicPropertyRegistry registry) {
+    public RabbitMQContainer getRabbitContainer(DynamicPropertyRegistry registry) {
         try (RabbitMQContainer rabbit = new RabbitMQContainer("rabbitmq:3.7.25-management-alpine")
-		    .withExposedPorts(5672, 15672)) {
+                .withExposedPorts(5672, 15672)) {
             registry.add("spring.rabbitmq.port", () -> rabbit.getAmqpPort());
             registry.add("eureka.client.enabled", () -> false);
 

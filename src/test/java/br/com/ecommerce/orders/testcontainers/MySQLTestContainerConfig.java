@@ -18,9 +18,9 @@ public class MySQLTestContainerConfig {
     public MySQLContainer<?> mysqlContainer() {
         System.out.println("AQUI");
         try (MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.36")
-            .withDatabaseName("testdb")
-            .withUsername("root")
-            .withPassword("root")) {
+                .withDatabaseName("testdb")
+                .withUsername("root")
+                .withPassword("root")) {
             mysqlContainer.start();
             return mysqlContainer;
         }
