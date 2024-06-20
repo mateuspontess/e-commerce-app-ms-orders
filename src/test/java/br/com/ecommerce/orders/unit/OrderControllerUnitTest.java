@@ -102,7 +102,8 @@ class OrderControllerUnitTest {
                 .header("X-auth-user-id", "1")
         )
         // assert
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.fields.products").exists());
 
         verifyNoInteractions(service);
         verifyNoInteractions(template);
