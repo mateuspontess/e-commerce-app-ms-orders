@@ -15,6 +15,7 @@ public class MySQLTestContainerConfig {
 
     @Bean
     public MySQLContainer<?> mysqlContainer() {
+        System.out.println("AQUI");
         MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.36")
             .withDatabaseName("testdb")
             .withUsername("root")
